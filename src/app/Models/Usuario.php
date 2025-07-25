@@ -10,25 +10,10 @@ class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+
     protected $table = 'usuarios';
 
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'nome',
         'matricula',
@@ -37,22 +22,24 @@ class Usuario extends Authenticatable
         'perfil_path',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+
     protected $hidden = [
         'senha',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+
     protected $casts = [
         'senha' => 'hashed',
     ];
+
+    /**
+     * Informa ao sistema de autenticação que o nome da nossa coluna de senha é 'senha'.
+     *
+     * @return string
+     */
+    public function getAuthPasswordName(): string
+    {
+        return 'senha';
+    }
 }
