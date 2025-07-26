@@ -20,6 +20,16 @@
                     <x-nav-link :href="route('telas.index')" :active="request()->routeIs('telas.*')">
                         {{ __('Telas') }}
                     </x-nav-link>
+
+                    <!-- Link para Programações (Adicionado) -->
+                    <x-nav-link :href="route('programacoes.index')" :active="request()->routeIs('programacoes.*')">
+                        {{ __('Programações') }}
+                    </x-nav-link>
+
+                    <!-- Link para Notícias (Adicionado) -->
+                    <x-nav-link :href="route('noticias.index')" :active="request()->routeIs('noticias.*')">
+                        {{ __('Notícias') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -83,9 +93,18 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <!-- Link para Telas (Adicionado no menu responsivo) -->
             <x-responsive-nav-link :href="route('telas.index')" :active="request()->routeIs('telas.*')">
                 {{ __('Telas') }}
+            </x-responsive-nav-link>
+
+            <!-- Link para Programações (Adicionado no menu responsivo) -->
+            <x-responsive-nav-link :href="route('programacoes.index')" :active="request()->routeIs('programacoes.*')">
+                {{ __('Programações') }}
+            </x-responsive-nav-link>
+
+            <!-- Link para Notícias (Adicionado no menu responsivo) -->
+            <x-responsive-nav-link :href="route('noticias.index')" :active="request()->routeIs('noticias.*')">
+                {{ __('Notícias') }}
             </x-responsive-nav-link>
         </div>
 

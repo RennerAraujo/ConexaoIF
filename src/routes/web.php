@@ -1,12 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DisplayController;
+use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\ProgramacaoController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TelaController;
-use App\Http\Controllers\ProfileController; // 1. Importe o ProfileController
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/display/{tela}', [DisplayController::class, 'show'])->name('display.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -18,6 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('telas', TelaController::class);
+    Route::resource('programacoes', ProgramacaoController::class)->parameters([
+
+        'programacoes' => 'programacao'
+
+    ]);
+    Route::resource('noticias', NoticiaController::class);
 });
 
 require __DIR__ . '/auth.php';

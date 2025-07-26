@@ -12,9 +12,7 @@ class Programacao extends Model
 {
     use HasFactory;
 
-
     protected $table = 'programacoes';
-
 
     protected $fillable = [
         'usuario_id',
@@ -24,13 +22,11 @@ class Programacao extends Model
         'status',
     ];
 
-
     protected $casts = [
         'status' => 'boolean',
         'data_inicio' => 'date',
         'data_final' => 'date',
     ];
-
 
     public function usuario(): BelongsTo
     {
@@ -45,6 +41,6 @@ class Programacao extends Model
 
     public function telas(): BelongsToMany
     {
-        return $this->belongsToMany(Tela::class, 'programacao_tela');
+        return $this->belongsToMany(Tela::class, 'tela_programacao');
     }
 }
