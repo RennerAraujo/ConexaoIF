@@ -46,14 +46,12 @@ class ProgramacaoController extends Controller
         return redirect()->route('programacoes.edit', $programacao);
     }
 
-    // Garanta que a variável aqui é $programacao
     public function edit(Programacao $programacao)
     {
         $telas = Tela::where('status', 1)->orderBy('nome')->get();
         return view('programacoes.edit', compact('programacao', 'telas'));
     }
 
-    // Garanta que a variável aqui é $programacao
     public function update(Request $request, Programacao $programacao)
     {
         $request->validate([
@@ -72,7 +70,6 @@ class ProgramacaoController extends Controller
             ->with('success', 'Programação atualizada com sucesso.');
     }
 
-    // Garanta que a variável aqui é $programacao
     public function destroy(Programacao $programacao)
     {
         $programacao->telas()->detach();

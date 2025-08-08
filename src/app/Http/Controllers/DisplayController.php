@@ -8,23 +8,18 @@ use Illuminate\Http\Request;
 
 class DisplayController extends Controller
 {
-    /**
-     * Mostra a programação ativa para uma tela específica.
-     */
+
     public function show(Tela $tela)
     {
-        // Pega a data de hoje para comparação
         $hoje = Carbon::today();
 
-        // Procura pela primeira programação que cumpra todas as condições:
         $programacaoAtiva = $tela->programacoes()
             ->where('status', 1)
             ->where('data_inicio', '<=', $hoje)
             ->where('data_final', '>=', $hoje)
-            ->with('noticias') // Já carrega as notícias para otimizar a performance
+            ->with('noticias')
             ->first();
 
-        // Envia a programação encontrada (ou null, se não encontrar) para a view
         return view('display.show', compact('programacaoAtiva'));
     }
 }

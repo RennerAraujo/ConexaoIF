@@ -4,118 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="300">
-    <title>Conexão IF</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #1a202c;
-            /* Fundo escuro */
-            color: white;
-            font-family: sans-serif;
-        }
 
+    <meta http-equiv="refresh" content="900">
+    <title>Conexão IF</title>
+
+    <link rel="stylesheet" href="{{ asset('display/css/estilo.css') }}">
+    <link rel="stylesheet" href="{{ asset('display/css/feather.css') }}">
+
+    <style>
         .slide {
-            width: 100vw;
-            height: 100vh;
             display: none;
-            /* Esconde todos os slides por padrão */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem;
-            box-sizing: border-box;
-            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
         }
 
         .slide.active {
-            display: flex;
-            /* Mostra apenas o slide ativo */
-        }
-
-        .slide-image {
-            max-height: 60vh;
-            max-width: 90%;
-            object-fit: contain;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .slide-title {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .slide-text {
-            font-size: 1.8rem;
-            line-height: 1.6;
-            max-width: 80ch;
-        }
-
-        .no-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            font-size: 2.5rem;
+            display: block;
+            opacity: 1;
         }
     </style>
 </head>
 
 <body>
-    @if ($programacaoAtiva && $programacaoAtiva->noticias->isNotEmpty())
-        <div id="slideshow-container">
-            @foreach ($programacaoAtiva->noticias as $noticia)
-                <div class="slide">
-                    <h1 class="slide-title">{{ $noticia->titulo }}</h1>
-                    <p class="slide-text">{{ $noticia->texto }}</p>
+    <div id="container">
+        <div id="lateral-bar">
+            <div class="box-data-temp">
+                <span id="dia"></span>
+                <span id="mes"></span>
+                <span id="ano"></span>
+                <span id="hora"></span>
+            </div>
+            <div class="logo-ifma">
+                <img src="{{ asset('display/img/logo-ifma.png') }}" alt="Logo IFMA">
+            </div>
+        </div>
+
+        <div id="painel">
+            @if ($programacaoAtiva && $programacaoAtiva->noticias->isNotEmpty())
+                <div id="slideshow-container">
+                    @foreach ($programacaoAtiva->noticias as $noticia)
+
+                        @if($noticia->titulo && $noticia->texto)
+                            <div class="slide noticia">
+                                <h2>{{ $noticia->titulo }}</h2>
+                                <p>{{ $noticia->texto }}</p>
+                                @if($noticia->imagem_path_1)
+                                    <img src="{{ Storage::url($noticia->imagem_path_1) }}" alt="">
+                                @endif
+                            </div>
+                        @endif
+
+                        @for ($i = 1; $i <= 5; $i++)
+                            @php $fieldName = 'imagem_path_' . $i; @endphp
+                            @if ($noticia->$fieldName)
+                                <div class="slide noticia">
+                                    <img src="{{ Storage::url($noticia->$fieldName) }}" alt="{{ $noticia->titulo }}">
+                                </div>
+                            @endif
+                        @endfor
+                    @endforeach
                 </div>
-                @for ($i = 1; $i <= 5; $i++) @php $fieldName = 'imagem_path_' . $i; @endphp @if ($noticia->$fieldName)
-                        <div class="slide">
-                            <img src="{{ Storage::url($noticia->$fieldName) }}" alt="{{ $noticia->titulo }}" class="slide-image">
-                        </div>
-                    @endif
-                @endfor
-            @endforeach
+            @else
+                <div class="noticia" style="display: flex; align-items: center; justify-content: center; height:100vh;">
+                    <h2 style="left: 0; position: relative; font-size: 2.5vw;">Nenhuma programação ativa para esta tela no
+                        momento.</h2>
+                </div>
+            @endif
         </div>
-    @else
-        <div class="no-content">
-            <span>Nenhuma programação ativa para esta tela no momento.</span>
-        </div>
-    @endif
+    </div>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const slideInterval = 10000;
+    <script src="{{ asset('display/js/jquery.js') }}"></script>
+    <script src="{{ asset('display/js/display.js') }}"></script>
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        if (slides.length > 0) {
-            showSlide(0); // Mostra o primeiro slide
-            setInterval(nextSlide, slideInterval); // Muda de slide a cada 10 segundos
-        }
-    </script>
 </body>
 
 </html>

@@ -8,62 +8,72 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-                    role="alert">
-                    <span class="block sm:inline">{{ session('success') }}</span>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p>{{ session('success') }}</p>
                 </div>
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div class="mb-4">
-                        <a href="{{ route('noticias.create') }}"
-                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                            Cadastrar Nova Notícia
+
+                    <div class="flex justify-start mb-4">
+                        <a href="{{ route('noticias.create') }}">
+                            <x-primary-button>
+                                {{ __('Cadastrar Nova Notícia') }}
+                            </x-primary-button>
                         </a>
                     </div>
 
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Título</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Programação Associada</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($noticias as $noticia)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $noticia->titulo }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $noticia->programacao->titulo }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ route('noticias.edit', $noticia) }}"
-                                            class="text-indigo-600 hover:text-indigo-900">Editar</a>
-                                        <form action="{{ route('noticias.destroy', $noticia) }}" method="POST"
-                                            class="inline"
-                                            onsubmit="return confirm('Tem certeza que deseja excluir esta notícia?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="text-red-600 hover:text-red-900 ml-4">Excluir</button>
-                                        </form>
-                                    </td>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Título
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Programação Associada
+                                    </th>
+                                    <th scope="col" class="relative px-6 py-3">
+                                        <span class="sr-only">Ações</span>
+                                    </th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
-                                        Nenhuma notícia cadastrada.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse ($noticias as $noticia)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">{{ $noticia->titulo }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ $noticia->programacao->titulo ?? 'N/A' }}
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a href="{{ route('noticias.edit', $noticia) }}"
+                                                class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                                            <form action="{{ route('noticias.destroy', $noticia) }}" method="POST"
+                                                class="inline ml-4"
+                                                onsubmit="return confirm('Tem certeza que deseja excluir esta notícia?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-red-600 hover:text-red-900">Excluir</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                            Nenhuma notícia cadastrada.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="mt-4">
                         {{ $noticias->links() }}

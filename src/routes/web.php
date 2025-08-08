@@ -11,7 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/display/{tela}', [DisplayController::class, 'show'])->name('display.show');
+Route::get('/display/{tela:slug}', [DisplayController::class, 'show'])->name('display.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
