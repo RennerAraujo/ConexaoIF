@@ -97,8 +97,15 @@ class UsuarioController extends Controller
      */
     public function destroy(Usuario $usuario)
     {
+        $admin = Usuario::where('role', 'admin')->first();
+        if (!$admin) {
+            return back()->with('error', 'Nenhum administrador encontrado para transferir as programações.');
+        }
+        if ($usuario->id === $admin->id) {
+            return back()->with('error', 'Não é possível excluir o administrador principal.');
+        }
+        $usuario->programacoes()->update(['usuario_id' => $admin->id]);
         $usuario->delete();
-
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuário excluído com sucesso!');
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuário excluído com sucesso! As programações foram transferidas para o administrador.');
     }
 }

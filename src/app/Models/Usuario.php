@@ -43,4 +43,8 @@ class Usuario extends Authenticatable
     {
         return 'senha';
     }
+    public function programacoes()
+    {
+        return $this->hasMany(Programacao::class);
+    }
 }
