@@ -34,16 +34,11 @@ function atualizaHora() {
 }
 
 function iniciarSlideshow(tempoPorSlide) {
-    let currentSlide = 0;
     const slides = $(".slide");
     const slideInterval = tempoPorSlide || 10000;
-    if (slides.length <= 1) {
-        if (slides.length === 1) {
-            $(slides[0]).addClass("active");
-            animarEntradaTexto($(slides[0]));
-        }
-        return;
-    }
+    if (slides.length === 0) return;
+
+    let currentSlide = parseInt(localStorage.getItem("currentSlide")) || 0;
 
     function animarEntradaTexto(slide) {
         const h2 = slide.find("h2");
@@ -72,13 +67,16 @@ function iniciarSlideshow(tempoPorSlide) {
     function mudarParaProximo() {
         $(slides[currentSlide]).removeClass("active");
         currentSlide = (currentSlide + 1) % slides.length;
+        localStorage.setItem("currentSlide", currentSlide);
+
         const novoSlide = $(slides[currentSlide]);
         novoSlide.addClass("active");
         animarEntradaTexto(novoSlide);
     }
 
-    $(slides[0]).addClass("active");
-    animarEntradaTexto($(slides[0]));
+    $(slides[currentSlide]).addClass("active");
+    animarEntradaTexto($(slides[currentSlide]));
+
     setInterval(proximoSlide, slideInterval);
 }
 

@@ -20,6 +20,7 @@ class Usuario extends Authenticatable
         'email',
         'senha',
         'perfil_path',
+        'role',
     ];
 
 

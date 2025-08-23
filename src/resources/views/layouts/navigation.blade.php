@@ -3,15 +3,12 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('telas.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
 
                     <x-nav-link :href="route('telas.index')" :active="request()->routeIs('telas.*')">
                         {{ __('Telas') }}
@@ -24,6 +21,12 @@
                     <x-nav-link :href="route('noticias.index')" :active="request()->routeIs('noticias.*')">
                         {{ __('Notícias') }}
                     </x-nav-link>
+
+                    @if (auth()->check() && auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.usuarios.index')" :active="request()->routeIs('admin.usuarios.*')">
+                            {{ __('Gerenciar Usuários') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -50,12 +53,10 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                            <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -63,7 +64,6 @@
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
@@ -84,18 +84,22 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-
             <x-responsive-nav-link :href="route('telas.index')" :active="request()->routeIs('telas.*')">
                 {{ __('Telas') }}
             </x-responsive-nav-link>
-
             <x-responsive-nav-link :href="route('programacoes.index')" :active="request()->routeIs('programacoes.*')">
                 {{ __('Programações') }}
             </x-responsive-nav-link>
-
             <x-responsive-nav-link :href="route('noticias.index')" :active="request()->routeIs('noticias.*')">
                 {{ __('Notícias') }}
             </x-responsive-nav-link>
+
+            @if (auth()->check() && auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.usuarios.index')"
+                    :active="request()->routeIs('admin.usuarios.*')">
+                    {{ __('Gerenciar Usuários') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200">
@@ -111,9 +115,8 @@
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                    <x-responsive-nav-link :href="route('logout')"
+                        onclick="event.preventDefault(); this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>

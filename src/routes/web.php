@@ -5,6 +5,7 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ProgramacaoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TelaController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,11 +25,13 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('telas', TelaController::class);
     Route::resource('programacoes', ProgramacaoController::class)->parameters([
-
         'programacoes' => 'programacao'
-
     ]);
     Route::resource('noticias', NoticiaController::class);
+});
+
+Route::middleware(['auth', 'is.admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('usuarios', UsuarioController::class);
 });
 
 require __DIR__ . '/auth.php';
