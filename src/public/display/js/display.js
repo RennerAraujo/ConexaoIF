@@ -1,87 +1,115 @@
-var arrayMes = [
-    "JAN",
-    "FEV",
-    "MAR",
-    "ABR",
-    "MAI",
-    "JUN",
-    "JUL",
-    "AGO",
-    "SET",
-    "OUT",
-    "NOV",
-    "DEZ",
-];
+$(document).ready(function () {
+    var arrayMes = [
+        "JAN",
+        "FEV",
+        "MAR",
+        "ABR",
+        "MAI",
+        "JUN",
+        "JUL",
+        "AGO",
+        "SET",
+        "OUT",
+        "NOV",
+        "DEZ",
+    ];
+    function atualizarData() {
+        var dataAtual = new Date();
+        var dia = dataAtual.getDate();
+        var mes = arrayMes[dataAtual.getMonth()];
+        var ano = dataAtual.getFullYear();
+        $("#dia").text(dia);
+        $("#mes").text(mes);
+        $("#ano").text(ano);
+    }
+    function atualizaHora() {
+        var d = new Date(),
+            displayDate;
+        displayDate = d.toLocaleTimeString("pt-BR", {
+            hour12: false,
+            timeZone: "America/Sao_Paulo",
+        });
+        $("#hora").html(displayDate);
+    }
+    atualizarData();
+    setInterval(atualizaHora, 1000);
 
-function atualizarData() {
-    var dataAtual = new Date();
-    var dia = dataAtual.getDate();
-    var mes = arrayMes[dataAtual.getMonth()];
-    var ano = dataAtual.getFullYear();
-    $("#dia").text(dia);
-    $("#mes").text(mes);
-    $("#ano").text(ano);
-}
+    const noticias = $(".slide.noticia");
+    const tempoPorImagem = 7000;
+    const tempoFade = 1500;
 
-function atualizaHora() {
-    var d = new Date(),
-        displayDate;
-    displayDate = d.toLocaleTimeString("pt-BR", {
-        hour12: false,
-        timeZone: "America/Sao_Paulo",
-    });
-    $("#hora").html(displayDate);
-}
+    if (noticias.length === 0) return;
 
-function iniciarSlideshow(tempoPorSlide) {
-    const slides = $(".slide");
-    const slideInterval = tempoPorSlide || 10000;
-    if (slides.length === 0) return;
+    let noticiaAtualIndex = 0;
+    let imagemAtualIndex = 0;
 
-    let currentSlide = parseInt(localStorage.getItem("currentSlide")) || 0;
-
-    function animarEntradaTexto(slide) {
-        const h2 = slide.find("h2");
-        const p = slide.find("p");
+    function animarEntradaTexto(noticiaElement) {
+        const h2 = noticiaElement.find("h2");
+        const p = noticiaElement.find("p");
         if (h2.length > 0) {
             h2.css("left", "-90vw").animate({ left: "2vw" }, 1500);
             p.css("left", "90vw").animate({ left: "2vw" }, 1500);
         }
     }
 
-    function proximoSlide() {
-        const slideAtual = $(slides[currentSlide]);
-        const h2 = slideAtual.find("h2");
-        const p = slideAtual.find("p");
-
+    function animarSaidaTexto(noticiaElement, callback) {
+        const h2 = noticiaElement.find("h2");
+        const p = noticiaElement.find("p");
         if (h2.length > 0 && p.length > 0) {
             h2.animate({ left: "90vw" }, 800);
             p.animate({ left: "-90vw" }, 800, function () {
-                mudarParaProximo();
+                callback();
             });
         } else {
-            mudarParaProximo();
+            callback();
         }
     }
 
-    function mudarParaProximo() {
-        $(slides[currentSlide]).removeClass("active");
-        currentSlide = (currentSlide + 1) % slides.length;
-        localStorage.setItem("currentSlide", currentSlide);
+    function proximoSlide() {
+        let noticiaAtual = $(noticias[noticiaAtualIndex]);
+        let imagens = noticiaAtual.find(".imagens-noticia img");
 
-        const novoSlide = $(slides[currentSlide]);
-        novoSlide.addClass("active");
-        animarEntradaTexto(novoSlide);
+        if (imagens.length > 0) {
+            imagens.eq(imagemAtualIndex).removeClass("active zooming");
+        }
+
+        imagemAtualIndex++;
+
+        if (imagens.length === 0 || imagemAtualIndex >= imagens.length) {
+            animarSaidaTexto(noticiaAtual, function () {
+                noticiaAtual.removeClass("active");
+                noticiaAtualIndex = (noticiaAtualIndex + 1) % noticias.length;
+                let proximaNoticia = $(noticias[noticiaAtualIndex]);
+                proximaNoticia.addClass("active");
+
+                imagemAtualIndex = 0;
+                let imagensDaProxima = proximaNoticia.find(
+                    ".imagens-noticia img"
+                );
+                if (imagensDaProxima.length > 0) {
+                    imagensDaProxima
+                        .eq(imagemAtualIndex)
+                        .addClass("active zooming");
+                }
+                animarEntradaTexto(proximaNoticia);
+            });
+        } else {
+            imagens.eq(imagemAtualIndex).addClass("active zooming");
+        }
     }
 
-    $(slides[currentSlide]).addClass("active");
-    animarEntradaTexto($(slides[currentSlide]));
+    function iniciar() {
+        let primeiraNoticia = $(noticias[0]);
+        primeiraNoticia.addClass("active");
 
-    setInterval(proximoSlide, slideInterval);
-}
+        let imagensDaPrimeira = primeiraNoticia.find(".imagens-noticia img");
+        if (imagensDaPrimeira.length > 0) {
+            imagensDaPrimeira.eq(0).addClass("active zooming");
+        }
 
-$(document).ready(function () {
-    atualizarData();
-    window.setInterval(atualizaHora, 1000);
-    iniciarSlideshow(10000);
+        animarEntradaTexto(primeiraNoticia);
+        setInterval(proximoSlide, tempoPorImagem);
+    }
+
+    iniciar();
 });

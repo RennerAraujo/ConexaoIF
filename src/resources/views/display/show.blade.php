@@ -10,19 +10,6 @@
 
     <link rel="stylesheet" href="{{ asset('display/css/estilo.css') }}">
     <link rel="stylesheet" href="{{ asset('display/css/feather.css') }}">
-
-    <style>
-        .slide {
-            display: none;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-        }
-
-        .slide.active {
-            display: block;
-            opacity: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -43,25 +30,25 @@
             @if ($programacaoAtiva && $programacaoAtiva->noticias->isNotEmpty())
                 <div id="slideshow-container">
                     @foreach ($programacaoAtiva->noticias as $noticia)
+                        <div class="slide noticia">
 
-                        @if($noticia->titulo && $noticia->texto)
-                            <div class="slide noticia">
-                                <h2>{{ $noticia->titulo }}</h2>
-                                <p>{{ $noticia->texto }}</p>
-                                @if($noticia->imagem_path_1)
-                                    <img src="{{ Storage::url($noticia->imagem_path_1) }}" alt="">
-                                @endif
+                            <div class="imagens-noticia">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @php $fieldName = 'imagem_path_' . $i; @endphp
+                                    @if ($noticia->$fieldName)
+                                        <img src="{{ Storage::url($noticia->$fieldName) }}" alt="{{ $noticia->titulo }}">
+                                    @endif
+                                @endfor
                             </div>
-                        @endif
 
-                        @for ($i = 1; $i <= 5; $i++)
-                            @php $fieldName = 'imagem_path_' . $i; @endphp
-                            @if ($noticia->$fieldName)
-                                <div class="slide noticia">
-                                    <img src="{{ Storage::url($noticia->$fieldName) }}" alt="{{ $noticia->titulo }}">
+                            @if($noticia->titulo && $noticia->texto)
+                                <div class="texto-noticia">
+                                    <h2>{{ $noticia->titulo }}</h2>
+                                    <p>{{ $noticia->texto }}</p>
                                 </div>
                             @endif
-                        @endfor
+
+                        </div>
                     @endforeach
                 </div>
             @else
@@ -74,8 +61,7 @@
     </div>
 
     <script src="{{ asset('display/js/jquery.js') }}"></script>
-    <script src="{{ asset('display/js/display.js') }}"></script>
-
+    <script src="{{ asset('display/js/display.js') }}?v=1.0"></script>
 </body>
 
 </html>

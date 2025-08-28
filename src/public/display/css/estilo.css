@@ -3,14 +3,12 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100%;
 }
-
 html,
 body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
 }
-
 #container {
     width: 100vw;
     min-height: 100vh;
@@ -20,11 +18,10 @@ body {
     left: 0;
     background-color: #00b894;
 }
-
 #lateral-bar {
     position: absolute;
     left: 0;
-    z-index: 99999;
+    z-index: 999;
     padding: 0.8vw;
     width: 10vw;
     height: 100vh;
@@ -36,12 +33,10 @@ body {
     background-size: cover;
     box-shadow: rgba(0, 0, 0, 1) 0px 3px 8px;
 }
-
 .box-data-temp {
     width: 80%;
     height: 70vh;
 }
-
 #dia {
     color: #fff;
     display: inline;
@@ -49,11 +44,9 @@ body {
     text-align: center;
     padding: 0;
 }
-
 #mes {
     border-top: 1px solid #fff;
 }
-
 #mes,
 #ano {
     font-size: 2vw;
@@ -62,14 +55,12 @@ body {
     text-align: center;
     width: 100%;
 }
-
 #ano {
     font-size: 1.2vw;
     letter-spacing: 0.2em;
     text-align: center;
     display: block;
 }
-
 #hora {
     width: 90%;
     height: 5%;
@@ -82,27 +73,16 @@ body {
     border: 1px solid #fff;
     background-color: #218c74;
 }
-
-#temp {
-    margin-top: 1vw;
-    font-size: 1.5vw;
-    color: #fff;
-    display: block;
-    text-align: center;
-}
-
 .logo-ifma {
     width: 80%;
     height: 25vh;
     text-align: center;
 }
-
 .logo-ifma img {
     width: 100%;
 }
-
 #painel {
-    width: 100vw;
+    width: 90vw;
     height: 100vh;
     position: absolute;
     left: 10vw;
@@ -110,35 +90,72 @@ body {
     overflow: hidden;
 }
 
-.noticia {
-    padding: 0;
-    box-sizing: border-box;
-    width: 100vw;
+.slide.noticia {
+    width: 100%;
     height: 100vh;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    overflow: hidden;
-    background-color: #218c74;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 1;
+}
+.slide.noticia.active {
+    opacity: 1;
+    z-index: 2;
+}
+.imagens-noticia {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-.noticia p,
-h2 {
+.imagens-noticia img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    transform: scale(1);
+}
+.imagens-noticia img.active {
+    opacity: 1;
+}
+
+.imagens-noticia img.zooming {
+    animation-name: zoomOriginal;
+    animation-duration: 15s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.texto-noticia {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    padding: 2vw;
+    box-sizing: border-box;
+}
+.texto-noticia h2 {
     width: 80vw;
     position: absolute;
-    z-index: 999;
-}
-
-.noticia h2 {
     display: block;
     padding: 1em;
     font-size: 4vw;
     color: #fff;
-    left: -90vw;
     text-shadow: black 0.1em 0.1em 0.2em;
 }
-
-.noticia p {
+.texto-noticia p {
+    width: 80vw;
+    position: absolute;
     top: 60vh;
     padding: 1vw;
     color: #fff;
@@ -147,43 +164,13 @@ h2 {
     text-align: justify;
     line-height: 2.3vw;
     border-radius: 0.4vw;
-    left: 90vw;
 }
 
-.noticia img {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    z-index: 0;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    transition: all 1s ease;
-    scale: 1;
-    animation-duration: 15s;
-    animation-name: zoom;
-}
-
-@keyframes zoom {
+@keyframes zoomOriginal {
     from {
-        scale: 1;
+        transform: scale(1);
     }
-
     to {
-        scale: 1.1;
+        transform: scale(1.1);
     }
-}
-
-.noticia img:load {
-    transform: scale(1.05);
-}
-
-.ativo {
-    display: block;
-}
-
-.oculto {
-    display: none;
 }

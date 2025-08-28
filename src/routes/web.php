@@ -15,9 +15,9 @@ Route::get('/', function () {
 Route::get('/display/{tela:slug}', [DisplayController::class, 'show'])->name('display.show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/telas', function () {
+        return view('telas.index');
+    })->name('telas');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
